@@ -576,7 +576,7 @@ export interface EncodedAudioChunkMetadata {
 }
 
 export type EncodedAudioChunkOutputCallback =
-    (output: eac.EncodedAudioChunk, metadata?: EncodedAudioChunkMetadata) => void;
+    (output: eac.EncodedAudioChunk, metadata: EncodedAudioChunkMetadata) => void;
 
 export interface AudioEncoderConfig {
     codec: string | {libavjs: libavs.LibAVJSCodec};
