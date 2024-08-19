@@ -1,5 +1,5 @@
 {
-  "name": "libavjs-webcodecs-polyfill",
+  "name": "@imput/libavjs-webcodecs-polyfill",
   "version": "0.5.1",
   "description": "A WebCodecs polyfill (ponyfill, really), using libav.js",
   "main": "dist/libavjs-webcodecs-polyfill.js",
