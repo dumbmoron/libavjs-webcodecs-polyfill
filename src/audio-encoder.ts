@@ -435,10 +435,12 @@ export class AudioEncoder extends et.DequeueEventTarget {
         if (extradataPtr && extradata_size)
             extradata = await libav.copyout_u8(extradataPtr, extradata_size);
 
-        this._outputMetadata!.decoderConfig.sampleRate = frame.sample_rate!;
-        this._outputMetadata!.decoderConfig.numberOfChannels = frame.channels!;
-        if (extradata)
-            this._outputMetadata!.decoderConfig.description = extradata;
+        if (this._outputMetadata && 'decoderConfig' in this._outputMetadata) {
+            this._outputMetadata.decoderConfig.sampleRate = frame.sample_rate!;
+            this._outputMetadata.decoderConfig.numberOfChannels = frame.channels!;
+            if (extradata)
+                this._outputMetadata.decoderConfig.description = extradata;
+        }
 
         this._outputMetadataFilled = true;
     }
@@ -462,9 +464,9 @@ export class AudioEncoder extends et.DequeueEventTarget {
             });
 
             if (this._outputMetadataFilled)
-                this._output(chunk, this._outputMetadata || void 0);
+                this._output(chunk, this._outputMetadata || {});
             else
-                this._output(chunk);
+                this._output(chunk, {});
         }
     }
 
@@ -571,9 +573,9 @@ export interface AudioEncoderInit {
     error: misc.WebCodecsErrorCallback;
 }
 
-export interface EncodedAudioChunkMetadata {
+export type EncodedAudioChunkMetadata = {} | {
     decoderConfig: adec.AudioDecoderConfig;
-}
+};
 
 export type EncodedAudioChunkOutputCallback =
     (output: eac.EncodedAudioChunk, metadata: EncodedAudioChunkMetadata) => void;
