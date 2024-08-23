@@ -94,7 +94,9 @@ async function codecs(encoders: boolean): Promise<string[]> {
         ["libvorbis", "vorbis"],
         ["libaom-av1", "av01"],
         ["libvpx-vp9", "vp09"],
-        ["libvpx", "vp8"]
+        ["libvpx", "vp8"],
+        ["libmp3lame", "mp3"],
+        ["mp3", "mp3"]
     ]) {
         if (encoders) {
             if (await libav.avcodec_find_encoder_by_name(avname))
@@ -167,8 +169,11 @@ export function decoder(
                 outCodec = "libvpx";
                 break;
 
-            // Unsupported
             case "mp3":
+                outCodec = "mp3";
+                break;
+
+            // Unsupported
             case "mp4a":
             case "ulaw":
             case "alaw":
@@ -308,8 +313,12 @@ export function encoder(
                 }
                 break;
 
-            // Unsupported
             case "mp3":
+                outCodec = "libmp3lame";
+                ctx.sample_fmt = 8 /* FLTP */;
+                break;
+
+            // Unsupported
             case "mp4a":
             case "ulaw":
             case "alaw":
