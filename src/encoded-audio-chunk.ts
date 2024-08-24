@@ -74,7 +74,7 @@ export class EncodedAudioChunk {
 
             // 6. Otherwise:
                 // 1. Assign a copy of init.data to [[internal data]].
-            
+
             const data = new Uint8Array(
                 (<any> init.data).buffer || init.data,
                 (<any> init.data).byteOffset || 0,
@@ -104,6 +104,38 @@ export class EncodedAudioChunk {
 
     // Internal
     _libavGetData() { return this._data; }
+
+    /**
+     * Convert a polyfill EncodedAudioChunk to a native EncodedAudioChunk.
+     */
+    toNative(video = false) {
+        const ret = new (<any> globalThis)[video ? 'EncodedVideoChunk' : 'EncodedAudioChunk']({
+            type: this.type,
+            timestamp: this.timestamp,
+            duration: this.duration,
+            data: this._data,
+            transfer: [this._data.buffer]
+        });
+
+        return ret;
+    }
+
+    /**
+     * Convert a native EncodedAudioChunk to a polyfill EncodedAudioChunk.
+     */
+    static fromNative(from: any /* native EncodedAudioChunk */) {
+        const chunk: EncodedAudioChunk = from;
+        const data = new Uint8Array(chunk.byteLength);
+        chunk.copyTo(data);
+
+        return new EncodedAudioChunk({
+            type: chunk.type,
+            timestamp: chunk.timestamp,
+            duration: chunk.duration ?? undefined,
+            data,
+            transfer: [ data.buffer ],
+        });
+    }
 
     copyTo(destination: BufferSource) {
         (new Uint8Array(
