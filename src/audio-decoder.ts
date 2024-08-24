@@ -314,22 +314,22 @@ export class AudioDecoder extends et.DequeueEventTarget {
                     break;
 
                 case libav.AV_SAMPLE_FMT_U8P:
-                    format = "u8";
+                    format = "u8-planar";
                     planar = true;
                     break;
 
                 case libav.AV_SAMPLE_FMT_S16P:
-                    format = "s16";
+                    format = "s16-planar";
                     planar = true;
                     break;
 
                 case libav.AV_SAMPLE_FMT_S32P:
-                    format = "s32";
+                    format = "s32-planar";
                     planar = true;
                     break;
 
                 case libav.AV_SAMPLE_FMT_FLTP:
-                    format = "f32";
+                    format = "f32-planar";
                     planar = true;
                     break;
 
